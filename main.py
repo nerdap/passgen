@@ -1,6 +1,8 @@
-from bottle import get, run, error, request, abort
+from bottle import Bottle, run, error, request, abort
 import random
 import linecache
+
+app = Bottle()
 
 def getNumberOfLinesInFile(fname):
     with open(fname) as f:
@@ -30,8 +32,8 @@ def generatePassword(num_words, separator, casing):
 		password += separator + applyCasing(word, casing)
 	return password
 
-@get('/GeneratePassword')
-@get('/GeneratePassword/<casing:re:(Capitalize|UpperCase|LowerCase)>') # check the re
+@app.get('/GeneratePassword')
+@app.get('/GeneratePassword/<casing:re:(Capitalize|UpperCase|LowerCase)>')
 def generatePasswordRoute(casing='LowerCase'):
 	# Get the number of words.
 	numWords = request.query.words or 4;
@@ -62,4 +64,4 @@ def generatePasswordRoute(casing='LowerCase'):
 
 	return password
 
-run(host='localhost', port=8080, debug=True)
+app.run(host='localhost', port=8080, debug=True)
